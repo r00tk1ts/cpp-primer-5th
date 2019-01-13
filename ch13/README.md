@@ -450,7 +450,7 @@ for_each(elements, first_free, [this](std::string &rhs){alloc.destroy(&rhs);});
 
 > 编写标准库string类的简化版本，命名为String。你的类应该至少有一个默认构造函数和一个接受C风格字符串指针参数的构造函数。使用allocator为你的String类分配所需内存。
 
-
+[ex13_44.h](ex13_44.h) | [ex13_44.cpp](ex13_44.cpp)
 
 ## 13.45
 
@@ -482,25 +482,29 @@ int &&r4 = vi[0] * f();
 
 > 对你在练习13.44中定义的String类，为它的拷贝构造函数和拷贝赋值运算符添加一条语句，在每次函数执行时打印一条消息。
 
-
+见13.44
 
 ## 13.48
 
 > 定义一个`vector<String>`并在其上多次调用push_back。运行你的程序，并观察String被拷贝了多少次。
 
-
+[ex13_48.cpp](ex13_48.cpp)
 
 ## 13.49
 
 > 为你的StrVec、String和Message类添加一个移动构造函数和一个移动赋值运算符。
 
+[StrVec.h](StrVec.h) | [StrVec.cpp](StrVec.cpp)
 
+[String.h](String.h) | [String.cpp](String.cpp)
+
+[Message.h](Message.h) | [Message.cpp](Message.cpp)
 
 ## 13.50
 
 > 在你的String类的移动操作中添加打印语句，并重新运行13.6.1节的练习13.48中的程序，它使用了一个`vector<String>`，观察什么时候会避免拷贝。
 
-
+略
 
 ## 13.51
 
@@ -524,19 +528,25 @@ hp2是左值，因此调用拷贝成员。
 
 > 从底层效率的角度看，HasPtr的赋值运算符并不理想，解释为什么。为HasPtr实现一个拷贝赋值运算符和一个移动赋值运算符，并比较你的新的移动赋值运算符中执行的操作和拷贝并交换版本中执行的操作。
 
+[this question && answer](http://stackoverflow.com/questions/21010371/why-is-it-not-efficient-to-use-a-single-assignment-operator-handling-both-copy-a).
 
+[ex13_53.h](ex13_53.h) | [ex13_53.cpp](ex13_53.cpp)
 
 ## 13.54
 
 > 如果我们为HasPtr定义了移动赋值运算符，但未改变拷贝并交换运算符，会发生什么？编写代码验证你的答案。
 
-
+因二义性而报错。
 
 ## 13.55
 
 > 为你的StrBlob添加一个右值引用版本的push_back。
 
-
+```cpp
+void push_back(string &&t){
+    data->push_back(std::move(t));
+}
+```
 
 ## 13.56
 
@@ -565,3 +575,4 @@ hp2是左值，因此调用拷贝成员。
 
 > 编写新版本的Foo类，其sorted函数有打印语句，测试这个类，来验证你对前两题的答案是否正确。
 
+[ex13_58.cpp](ex13_58.cpp)
