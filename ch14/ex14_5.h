@@ -14,7 +14,7 @@ public:
     Book() = default;
     Book(unsigned _no, std::string _name, std::string _author, std::string _pubdate):no(_no), name(_name), author(_author), pubdate(_pubdate) { }
     Book(std::istream &in) { in >> *this; }
-
+    explicit operator bool(){ return true; }
 private:
     unsigned no;
     std::string name;

@@ -5,9 +5,9 @@
 #include <iostream>
 
 class Sales_data {
-    friend std::istream& operator>>(std::istream&, Sales_data&); 
-    friend std::ostream& operator<<(std::ostream&, const Sales_data&);
-    friend Sales_data operator+(const Sales_data&, const Sales_data&);
+    friend std::istream& operator>>(std::istream&, Sales_data&); // input
+    friend std::ostream& operator<<(std::ostream&, const Sales_data&); // output
+    friend Sales_data operator+(const Sales_data&, const Sales_data&); // addition
 
 public:
     Sales_data(const std::string &s, unsigned n, double p):bookNo(s), units_sold(n), revenue(n*p){ }
@@ -15,7 +15,7 @@ public:
     Sales_data(const std::string &s) : Sales_data(s, 0, 0.0f){ }
     Sales_data(std::istream &is);
 
-    Sales_data& operator+=(const Sales_data&); 
+    Sales_data& operator+=(const Sales_data&); // compound-assignment
     std::string isbn() const { return bookNo; }
 
 private:

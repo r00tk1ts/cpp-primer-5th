@@ -10,7 +10,7 @@ struct IsInRange
 
     bool operator()(std::string const& str) const
     {
-        return str.size() >= _lower && str.size() <= _upper;
+        return str.size() >= lower && str.size() <= upper;
     }
 
     std::size_t lower_limit() const

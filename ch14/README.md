@@ -371,3 +371,161 @@ private:
 > 你认为C++11新标准为什么要增加lambda？对于你自己来说，什么情况下会使用lambda，什么情况下会使用类？
 
 函数不复杂且使用不频繁时会用lambda，反之则用函数对象。
+
+## 14.42
+
+> 使用标准库函数对象及适配器定义一条表达式，令其
+>
+> (a)统计大于1024的值有多少个。
+>
+> (b)找到第一个不等于pooh的字符串。
+>
+> (c)将所有的值乘以2。
+
+(a)`std::count_if(vec.begin(), vec.end(), std::bind(std::greater<int>(),_1, 1024));`
+
+(b)`std::find_if(vec.begin(), vec.end(), std::bind(std::not_equal_to<std::string>(), _1, "pooh"));`
+
+(c)`std::transform(vec.begin(), vec.end(), vec.begin(), std::bind(std::multiplies<int>(), _1, 2));`
+
+## 14.43
+
+> 使用标准库函数对象判断一个给定的int值是否能被int容器中的所有元素整除。
+
+[ex14_43.cpp](ex14_43.cpp)
+
+## 14.44
+
+> 编写一个简单的桌面计数器使其能处理二元运算。
+
+[ex14_44.cpp](ex14_44.cpp)
+
+## 14.45
+
+> 编写类型转换运算符将一个Sales_data对象分别转换成string和double，你认为这些运算符的返回值应该是什么？
+
+转string应该返回bookNo，转double应该返回avg_price()计算的值。
+
+```cpp
+class Sales_data{
+    ...
+public:
+    explicit operator std::string() const { return bookNo; }
+    explicit operator double() const { return avg_price(); }
+    ...
+};
+```
+
+## 14.46
+
+> 你认为应该为Sales_data类定义上面两种类型转换运算符吗？应该把它们声明成explicit的吗？为什么？
+
+不应该，语义上非常差，这种类型转换具有误导作用。如果定义了，那么需要explicit，这是为了防止隐式类型转换。
+
+## 14.47
+
+> 说明下面这两个类型转换运算符的区别。
+>
+> ```cpp
+> struct Integral{
+>     operator const int();
+>     operator int() const;
+> };
+> ```
+
+前者转为const int，后者是转成int，const表示该函数本身不会修改类数据成员，传递const this指针。
+
+## 14.48
+
+> 你在7.5.1节的练习7.40中曾经选择并编写了一个类，你认为它应该含有向bool的类型转换运算符吗？如果是，解释原因并说明该运算符是否应该是explicit的；如果不是，也请解释原因。
+
+Book类不需要这样的语义，无需定义。
+
+## 14.49
+
+> 为上一题提到的类定义一个转换目标是bool的类型转换运算符，先不用在意这么做是否应该。
+
+见14.5
+
+## 14.50
+
+> 在初始化ex1和ex2的过程中，可能用到哪些类类型的转换序列呢？说明初始化是否正确并解释原因。
+>
+> ```cpp
+> struct LongDouble{
+>     LongDouble(double = 0.0);
+>     operator double();
+>     operator float();
+> };
+> LongDouble ldObj;
+> int ex1 = ldObj;
+> float ex2 = ldObj;
+> ```
+
+ex1会产生二义性错误，因为转成double或float匹配度相同。
+
+ex2会转成float。
+
+## 14.51
+
+> 在调用calc的过程中，可能用到哪些类型转换序列呢？说明最佳可行函数是如何被选出来的。
+>
+> ```cpp
+> void calc(int);
+> void calc(LongDouble);
+> double dval;
+> calc(dval);	//哪个calc？
+> ```
+
+会调用`void calc(int);`。
+
+因为自定义类型转换优先级低于内置类型转换。
+
+优先级：
+
+1. 严格匹配
+2. const转换
+3. 向上转型
+4. 算术或指针类型转换
+5. 类类型转换
+
+## 14.52
+
+> 在下面的加法表达式中分别选用了哪个operator+？列出候选函数、可行函数及为每个可行函数的实参执行的类型转换：
+>
+> ```cpp
+> struct LongDouble{
+>     ...
+>     LongDouble operator+(const SmallInt&);
+>     ...
+> };
+> 
+> LongDouble operator+(LongDouble & double);
+> SmallInt si;
+> LongDouble ld;
+> ld = si + ld;
+> ld = ld + si;
+> ```
+
+对前者，存在二义性，对后者，精准匹配。
+
+## 14.53
+
+> 假设我们已经定义了如第522页所示的SmallInt，判断下面的加法表达式是否合法。如果合法，使用了哪个加法运算符？如果不合法，应该怎样修改代码才能使其合法？
+>
+> ```cpp
+> SmallInt si;
+> double d = si + 3.14;
+> ```
+
+不合法，产生二义性。
+
+```cpp
+SmallInt si;
+double d = si + SmallInt(3.14);
+```
+
+
+
+
+

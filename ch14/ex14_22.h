@@ -1,5 +1,5 @@
-#ifndef EX14_2_H
-#define EX14_2_H
+#ifndef EX14_22_H
+#define EX14_22_H
 
 #include <string>
 #include <iostream>
@@ -14,7 +14,7 @@ public:
     Sales_data() : Sales_data("", 0, 0.0f){ }
     Sales_data(const std::string &s) : Sales_data(s, 0, 0.0f){ }
     Sales_data(std::istream &is);
-
+    Sales_data& operator=(const std::string&);
     Sales_data& operator+=(const Sales_data&); 
 	Sales_data& operator-=(const Sales_data&);
     std::string isbn() const { return bookNo; }
